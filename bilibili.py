@@ -111,8 +111,5 @@ if __name__ == '__main__':
         print('just a test code!')
         print('it is use to learn git')
         print('have a good day')
-        
-        
         print('hahahaha, I have done some thing in ubuntu')
-        print('Ubuntu again!)
-
+        print('Ubuntu again!')
