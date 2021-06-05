@@ -106,4 +106,8 @@ def get_video(jiemian, temp_url, filename):
 
 if __name__ == '__main__':
     url = ''
-    get_video(none,url)
+    get_video("""a ui jiemian""",url)
+    while False:
+        print('just a test code!')
+        print('it is use to learn git')
+        print('have a good day')
