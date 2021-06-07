@@ -13,7 +13,7 @@
 - 脚本运行过程中会产生"**工作环境**"目录，别管它，它很快就会消失 :sunglasses:
 - 暂时仅支持下载目标视频的 **最高画质**
 - 未能正确请求到视频页面时，程序会**闪退** ( *将会尽快被优化* )
-- 由[@HaoGaulle](https://github.com/HaoGualle) 完成脚本的编写，也正时刻欢迎你的帮助！
+- 由[@HaoGaulle](https://github.com/HaoGaulle) 完成脚本的编写，也正时刻欢迎你的帮助！
 
 
 
@@ -58,7 +58,7 @@
 
 #### End
 
-本项目将由[@HaoGaulle](https://github.com/HaoGualle) 持续维护:point_left:
+本项目将由[@HaoGaulle](https://github.com/HaoGaulle) 持续维护:point_left:
 
 如有任何问题或建议欢迎提交issue或discussion与我联系！
 
