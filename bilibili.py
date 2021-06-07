@@ -29,7 +29,7 @@ def get_video(jiemian, temp_url, filename):
     jiemian.ui.textBrowser.append('正在捕捉json文件……')
     script = tree.xpath('/html/head/script[5]/text()')[0]
     script = re.sub('window.__playinfo__=', '', script)
-    jiemian.ui.textBrowser.append('正在重载信息树……')
+    jiemian.ui.textBrowser.append('正在加载json')
     script = json.loads(script)
 
     # 下载视频
@@ -87,7 +87,7 @@ def get_video(jiemian, temp_url, filename):
     video = moviepy.editor.VideoFileClip('./工作环境/bilibili.mp4')
     audio = moviepy.editor.AudioFileClip('./工作环境/bilibili.mp3')
     video = video.set_audio(audio)
-    video.write_videofile('./下载视频/' + filename + '.mp4')
+    video.write_videofile('./下载视频/' + filename + '.mp4', verbose=False)
     jiemian.ui.textBrowser.append('数据混流完成！')
 
     # 删除中间音视频工程文件

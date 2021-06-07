@@ -4,6 +4,7 @@ from PyQt5.QtGui import QIcon
 import ui
 from threading import Thread
 import bilibili
+import ctypes
 
 
 class Jiemian:
@@ -11,7 +12,7 @@ class Jiemian:
         self.Mainwindow = QMainWindow()
         self.ui = ui.Ui_MainWindow()
         self.ui.setupUi(self.Mainwindow)
-        self.Mainwindow.setWindowIcon(QIcon('./icon/bilibili.png'))
+        #  self.Mainwindow.setWindowIcon(QIcon('./icon/bilibili.png'))
         self.ui.pushButton.clicked.connect(self.download_btn)
         self.ui.pushButton_2.clicked.connect(self.reset_all_btn)
         self.ui.pushButton_4.clicked.connect(self.reset_filename_btn)
@@ -40,7 +41,14 @@ class Jiemian:
         self.ui.lineEdit_2.clear()
 
 
-app = QApplication([])
-jiemian = Jiemian()
-jiemian.Mainwindow.show()
-sys.exit(app.exec_())
+if __name__ == '__main__':
+    #  屏蔽控制台
+    whnd = ctypes.windll.kernel32.GetConsoleWindow()
+    if whnd != 0:
+        ctypes.windll.user32.ShowWindow(whnd, 0)
+        ctypes.windll.kernel32.CloseHandle(whnd)
+
+    app = QApplication([])
+    jiemian = Jiemian()
+    jiemian.Mainwindow.show()
+    sys.exit(app.exec_())
