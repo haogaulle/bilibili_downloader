@@ -8,12 +8,11 @@ import json
 
 
 def get_video(jiemian, temp_url, filename):
-# https://www.bilibili.com/video/BV1EX4y157hD
     url = temp_url
     headers = {
         'authority': 'www.bilibili.com',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                  'Chrome/88.0.4324.182 Safari/537.36',
+                      'Chrome/88.0.4324.182 Safari/537.36',
         'origin': 'https://www.bilibili.com'
     }
     jiemian.ui.textBrowser.append('正在向目标服务器发起请求……')
@@ -33,7 +32,7 @@ def get_video(jiemian, temp_url, filename):
     jiemian.ui.textBrowser.append('正在重载信息树……')
     script = json.loads(script)
 
-# 下载视频
+    # 下载视频
     jiemian.ui.textBrowser.append('开始下载视频文件……')
     if not os.path.exists('工作环境'):
         os.makedirs('./工作环境')
@@ -41,15 +40,10 @@ def get_video(jiemian, temp_url, filename):
         os.makedirs('./下载视频')
     jiemian.ui.textBrowser.append('正在捕获url……')
     url = script['data']['dash']['video'][0]['baseUrl']
-    headers = {
-        'authority': '',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                      'Chrome/88.0.4324.182 Safari/537.36',
-        'origin': 'https://www.bilibili.com',
-        'referer': 'https://www.bilibili.com/',
-        'Range': ''
-    }
-    headers['authority'] = re.findall('https://(.*?)/', url)[-1]
+    headers = {'authority': re.findall('https://(.*?)/', url)[-1],
+               'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                             'Chrome/88.0.4324.182 Safari/537.36', 'origin': 'https://www.bilibili.com',
+               'referer': 'https://www.bilibili.com/', 'Range': ''}
     video_range = 'bytes=0-%d'
     headers['Range'] = format(video_range % 1000)
     jiemian.ui.textBrowser.append('正在获取数据容量……')
@@ -63,11 +57,11 @@ def get_video(jiemian, temp_url, filename):
         fp.write(response.content)
     jiemian.ui.textBrowser.append('视频文件下载完成!')
 
-# 下载音频
+    # 下载音频
     jiemian.ui.textBrowser.append('开始下载视频文件……')
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                     'Chrome/88.0.4324.182 Safari/537.36',
+                      'Chrome/88.0.4324.182 Safari/537.36',
         'origin': 'https://www.bilibili.com',
         'referer': 'https://www.bilibili.com/',
         'Range': ''
@@ -87,7 +81,7 @@ def get_video(jiemian, temp_url, filename):
         fp.write(response.content)
     jiemian.ui.textBrowser.append('音频文件下载完成!')
 
-# 音视频混流
+    # 音视频混流
     jiemian.ui.textBrowser.append('开始进行数据混流……')
     jiemian.ui.textBrowser.append('正在进行数据混流……(请耐心等待)')
     video = moviepy.editor.VideoFileClip('./工作环境/bilibili.mp4')
@@ -96,7 +90,7 @@ def get_video(jiemian, temp_url, filename):
     video.write_videofile('./下载视频/' + filename + '.mp4')
     jiemian.ui.textBrowser.append('数据混流完成！')
 
-# 删除中间音视频工程文件
+    # 删除中间音视频工程文件
     jiemian.ui.textBrowser.append('正在清洗工作环境……')
     os.remove('./工作环境/bilibili.mp3')
     os.remove('./工作环境/bilibili.mp4')
@@ -105,11 +99,4 @@ def get_video(jiemian, temp_url, filename):
 
 
 if __name__ == '__main__':
-    url = ''
-    get_video("""a ui jiemian""",url)
-    while False:
-        print('just a test code!')
-        print('it is use to learn git')
-        print('have a good day')
-        print('hahahaha, I have done some thing in ubuntu')
-        print('Ubuntu again!')
+    pass

@@ -4,7 +4,6 @@ from PyQt5.QtGui import QIcon
 import ui
 from threading import Thread
 import bilibili
-import PyQt5.sip
 
 
 class Jiemian:
