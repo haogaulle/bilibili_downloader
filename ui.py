@@ -101,3 +101,4 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", "Filename:"))
         self.pushButton_4.setText(_translate("MainWindow", "清除"))
         self.label_2.setText(_translate("MainWindow", "日志:"))
+        pass
