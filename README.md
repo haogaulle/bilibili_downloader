@@ -19,15 +19,18 @@
 
 #### Dependencies
 
-- Windows 10 x64
-- Python 3.x
+- Windows10 x64
+- Python 3.8+
 - 相关库详见requirements.txt
 
 
 
 #### Usage
 
-#### 运行方式
+##### 安装Python
+- 详见百度
+
+##### 运行方式
 
 1.  **clone /下载** 本项目到本地
 
