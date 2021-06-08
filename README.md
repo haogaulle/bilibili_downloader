@@ -19,7 +19,8 @@
 
 #### Dependencies
 
-- Windows10 x64
+- Windows10 x64 
+- Ubuntu 20.04.2.0+
 - Python 3.8+
 - 相关库详见requirements.txt
 
