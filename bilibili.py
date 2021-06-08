@@ -87,7 +87,7 @@ def get_video(jiemian, temp_url, filename):
     video = moviepy.editor.VideoFileClip('./工作环境/bilibili.mp4')
     audio = moviepy.editor.AudioFileClip('./工作环境/bilibili.mp3')
     video = video.set_audio(audio)
-    video.write_videofile('./下载视频/' + filename + '.mp4', verbose=False)
+    video.write_videofile('./下载视频/' + filename + '.mp4', verbose=False, logger=None)
     jiemian.ui.textBrowser.append('数据混流完成！')
 
     # 删除中间音视频工程文件

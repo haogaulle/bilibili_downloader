@@ -42,12 +42,13 @@ class Jiemian:
 
 
 if __name__ == '__main__':
-    #  屏蔽控制台
+    #  屏蔽控制台(已优化)
+    """
     whnd = ctypes.windll.kernel32.GetConsoleWindow()
     if whnd != 0:
         ctypes.windll.user32.ShowWindow(whnd, 0)
         ctypes.windll.kernel32.CloseHandle(whnd)
-
+    """
     app = QApplication([])
     jiemian = Jiemian()
     jiemian.Mainwindow.show()
