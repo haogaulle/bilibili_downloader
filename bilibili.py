@@ -21,8 +21,8 @@ def get_video(jiemian, temp_url, filename):
         jiemian.ui.textBrowser.append('已获取服务器正确响应! (响应码: 200)')
     else:
         jiemian.ui.textBrowser.append('未能获取服务器正确响应:\n   错误码: ' + str(response.status_code))
-        jiemian.ui.textBrowser.append('本程序已经终止!')
-        sys.exit(0)
+        jiemian.wrong_signal.emit()
+        return 0
     jiemian.ui.textBrowser.append('正在解析网页……')
     page = response.content.decode('utf-8')
     tree = etree.HTML(page)
@@ -96,6 +96,7 @@ def get_video(jiemian, temp_url, filename):
     os.remove('./工作环境/bilibili.mp4')
     os.rmdir('./工作环境')  # 删除目录
     jiemian.ui.textBrowser.append('视频下载成功!')
+    jiemian.succ_signal.emit()
 
 
 if __name__ == '__main__':
