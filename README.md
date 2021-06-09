@@ -4,7 +4,7 @@
 
 
 
-#### Description
+### Description
 
 **特此声明：** 本项目用于学习交流，禁止用于任何商业用途！
 
@@ -17,7 +17,7 @@
 
 
 
-#### Dependencies
+### Dependencies
 
 - Windows10 x64 
 - Ubuntu 20.04.2.0+
@@ -27,7 +27,7 @@
 
 
 
-#### Usage
+### Usage
 
 ##### 安装Python
 - 详见百度
@@ -40,16 +40,16 @@
 
 3.  安装依赖库
 
-   - **win + R** 打开运行菜单
-   - 输入**cmd**打开命令提示符
-   - 输入：
+    - **win + R** 打开运行菜单
+    - 输入**cmd**打开命令提示符
+    - 输入：
 
-   ```
-   pip install -r requirements.txt
-   ```
+    ```
+    pip install -r requirements.txt
+    ```
 
-   - 完成安装
-   - 关闭命令提示符
+    - 完成安装
+    - 关闭命令提示符
 
 4.  打开脚本所在文件夹，运行"**bilibili下载器.py**"
 
@@ -61,7 +61,7 @@
 
 
 
-#### End
+### End
 
 本项目将由[@HaoGaulle](https://github.com/HaoGaulle) 持续维护:point_left:
 
