@@ -44,16 +44,19 @@
     - 输入**cmd**打开命令提示符
     - 输入：
 
-    ```
-    pip install -r requirements.txt
-    ```
-
+        ```shell
+        pip install -r requirements.txt
+        ```
+        若安装速度太慢，请切换阿里源：
+        ```shell
+        pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+        ```
     - 完成安装
     - 关闭命令提示符
 
-4.  打开脚本所在文件夹，运行"**bilibili下载器.pyw**"
+4. 打开脚本所在文件夹，运行"**bilibili下载器.pyw**"
 
-5.  输入URL和文件名即可开始下载视频
+5. 输入URL和文件名即可开始下载视频
 
 6. 请耐心等待下载进程
 
