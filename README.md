@@ -22,9 +22,9 @@
 ### Dependencies
 
 - Windows10 x64 
-- Ubuntu 20.04.2.0+
+- ~~Ubuntu 20.04.2.0+~~(暂不支持)
 - Python 3.8+
-- macOS系统下未知，欢迎尝试
+- ~~macOS系统下未知，欢迎尝试~~(暂不支持)
 - 相关库详见requirements.txt
 
 
