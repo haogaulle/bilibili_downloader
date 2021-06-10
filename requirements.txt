@@ -2,3 +2,4 @@ PyQt5~=5.15.2
 requests~=2.25.1
 moviepy~=1.0.3
 lxml~=4.6.2
+pywin32~=300
