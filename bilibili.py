@@ -1,13 +1,15 @@
 import os
-import sys
-import requests
-from lxml import etree
 import re
-import moviepy.editor
 import json
+import requests
+import win32con
+import win32api
+import moviepy.editor
+from lxml import etree
+from time import sleep
 
 
-def get_video(jiemian, temp_url, filename):
+def get_video(jiemian, temp_url, filename, path):
     url = temp_url
     headers = {
         'authority': 'www.bilibili.com',
@@ -18,8 +20,10 @@ def get_video(jiemian, temp_url, filename):
     jiemian.ui.textBrowser.append('正在向目标服务器发起请求……')
     response = requests.get(url=url, headers=headers)
     if response.status_code == 200:
+        sleep(0.2)
         jiemian.ui.textBrowser.append('已获取服务器正确响应! (响应码: 200)')
     else:
+        sleep(0.2)
         jiemian.ui.textBrowser.append('未能获取服务器正确响应:\n   错误码: ' + str(response.status_code))
         jiemian.wrong_signal.emit()
         return 0
@@ -36,8 +40,9 @@ def get_video(jiemian, temp_url, filename):
     jiemian.ui.textBrowser.append('开始下载视频文件……')
     if not os.path.exists('工作环境'):
         os.makedirs('./工作环境')
-    if not os.path.exists('下载视频'):
-        os.makedirs('./下载视频')
+        win32api.SetFileAttributes('./工作环境', win32con.FILE_ATTRIBUTE_HIDDEN)
+    if not os.path.exists(path):
+        os.makedirs(path)
     jiemian.ui.textBrowser.append('正在捕获url……')
     url = script['data']['dash']['video'][0]['baseUrl']
     headers = {'authority': re.findall('https://(.*?)/', url)[-1],
@@ -46,6 +51,7 @@ def get_video(jiemian, temp_url, filename):
                'referer': 'https://www.bilibili.com/', 'Range': ''}
     video_range = 'bytes=0-%d'
     headers['Range'] = format(video_range % 1000)
+    sleep(0.2)
     jiemian.ui.textBrowser.append('正在获取数据容量……')
     response = requests.get(url=url, headers=headers)
     video_length = int(response.headers['Content-Range'].split('/')[-1]) - 1
@@ -58,6 +64,7 @@ def get_video(jiemian, temp_url, filename):
     jiemian.ui.textBrowser.append('视频文件下载完成!')
 
     # 下载音频
+    sleep(0.2)
     jiemian.ui.textBrowser.append('开始下载视频文件……')
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -82,12 +89,13 @@ def get_video(jiemian, temp_url, filename):
     jiemian.ui.textBrowser.append('音频文件下载完成!')
 
     # 音视频混流
+    sleep(0.2)
     jiemian.ui.textBrowser.append('开始进行数据混流……')
     jiemian.ui.textBrowser.append('正在进行数据混流……(请耐心等待)')
     video = moviepy.editor.VideoFileClip('./工作环境/bilibili.mp4')
     audio = moviepy.editor.AudioFileClip('./工作环境/bilibili.mp3')
     video = video.set_audio(audio)
-    video.write_videofile('./下载视频/' + filename + '.mp4', verbose=False, logger=None)
+    video.write_videofile(path + '/' + filename + '.mp4', verbose=False, logger=None)
     jiemian.ui.textBrowser.append('数据混流完成！')
 
     # 删除中间音视频工程文件

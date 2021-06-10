@@ -1,11 +1,12 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
-import sys
-from PyQt5.QtGui import QIcon
 import ui
-from threading import Thread
-import bilibili
+import sys
 import ctypes
+import bilibili
+from threading import Thread
+from PyQt5.QtGui import QIcon
+from PyQt5.Qt import QFileDialog
 from PyQt5.QtCore import pyqtSignal, QObject
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 
 
 class Jiemian(QObject):
@@ -21,6 +22,7 @@ class Jiemian(QObject):
         self.ui.pushButton.clicked.connect(self.download_btn)
         self.ui.pushButton_2.clicked.connect(self.reset_all_btn)
         self.ui.pushButton_4.clicked.connect(self.reset_filename_btn)
+        self.ui.pushButton_3.clicked.connect(self.get_directory)
 
         self.wrong_signal.connect(self.show_wrong_info)
         self.succ_signal.connect(self.show_succ_info)
@@ -29,12 +31,15 @@ class Jiemian(QObject):
         self.ui.textBrowser.clear()
         url = self.ui.lineEdit.text()
         filename = self.ui.lineEdit_2.text()
-        if url == '':
+        path = self.ui.lineEdit_3.text()
+        if url.strip() == '':
             QMessageBox.about(self.Mainwindow, '警告', '请输入视频URL！')
-        elif filename == '':
+        elif filename.strip() == '':
             QMessageBox.about(self.Mainwindow, '警告', '请输入视频文件名！')
+        elif path.strip() == '':
+            QMessageBox.about(self.Mainwindow, '警告', '请选择视频保存位置！')
         else:
-            thread = Thread(target=bilibili.get_video, args=(self, url, filename))
+            thread = Thread(target=bilibili.get_video, args=(self, url, filename, path))
             thread.start()
 
     def reset_all_btn(self):
@@ -50,6 +55,10 @@ class Jiemian(QObject):
 
     def show_succ_info(self):
         QMessageBox.about(self.Mainwindow, '提示', self.ui.lineEdit_2.text()+' 下载成功！')
+
+    def get_directory(self):
+        path = QFileDialog.getExistingDirectory(self.Mainwindow, 'nome', './')
+        self.ui.lineEdit_3.setText(path)
 
 
 if __name__ == '__main__':
