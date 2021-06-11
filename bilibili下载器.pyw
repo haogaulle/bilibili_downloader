@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 class Jiemian(QObject):
     wrong_signal = pyqtSignal()
     succ_signal = pyqtSignal()
+    log_signal = pyqtSignal(str)
 
     def __init__(self):
         QObject.__init__(self)
@@ -26,6 +27,7 @@ class Jiemian(QObject):
 
         self.wrong_signal.connect(self.show_wrong_info)
         self.succ_signal.connect(self.show_succ_info)
+        self.log_signal.connect(self.show_log)
 
     def download_btn(self):
         self.ui.textBrowser.clear()
@@ -59,6 +61,9 @@ class Jiemian(QObject):
     def get_directory(self):
         path = QFileDialog.getExistingDirectory(self.Mainwindow, 'nome', './')
         self.ui.lineEdit_3.setText(path)
+
+    def show_log(self, text):
+        self.ui.textBrowser.append(text)
 
 
 if __name__ == '__main__':
