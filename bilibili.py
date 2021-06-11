@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import tempfile
 import requests
 import win32con
 import win32api
@@ -38,9 +39,14 @@ def get_video(jiemian, temp_url, filename, path):
 
     # 下载视频
     jiemian.ui.textBrowser.append('开始下载视频文件……')
+    """
+    # 已优化
     if not os.path.exists('工作环境'):
         os.makedirs('./工作环境')
         win32api.SetFileAttributes('./工作环境', win32con.FILE_ATTRIBUTE_HIDDEN)
+    """
+    t_dir = tempfile.TemporaryDirectory()  # eg:C:\Users\86181\AppData\Local\Temp\tmpyu5xsn7n
+    t_path = t_dir.name
     if not os.path.exists(path):
         os.makedirs(path)
     jiemian.ui.textBrowser.append('正在捕获url……')
@@ -59,7 +65,7 @@ def get_video(jiemian, temp_url, filename, path):
     headers['Range'] = format(video_range % video_length)
     jiemian.ui.textBrowser.append('正在写入数据……')
     response = requests.get(url=url, headers=headers)
-    with open('./工作环境/bilibili.mp4', 'wb') as fp:
+    with open(t_path + '/bilibili.mp4', 'wb') as fp:
         fp.write(response.content)
     jiemian.ui.textBrowser.append('视频文件下载完成!')
 
@@ -84,7 +90,7 @@ def get_video(jiemian, temp_url, filename, path):
     headers['Range'] = format(audio_range % audio_length)
     jiemian.ui.textBrowser.append('正在写入数据……')
     response = requests.get(url=url, headers=headers)
-    with open('./工作环境/bilibili.mp3', 'wb') as fp:
+    with open(t_path + '/bilibili.mp3', 'wb') as fp:
         fp.write(response.content)
     jiemian.ui.textBrowser.append('音频文件下载完成!')
 
@@ -92,17 +98,17 @@ def get_video(jiemian, temp_url, filename, path):
     sleep(0.2)
     jiemian.ui.textBrowser.append('开始进行数据混流……')
     jiemian.ui.textBrowser.append('正在进行数据混流……(请耐心等待)')
-    video = moviepy.editor.VideoFileClip('./工作环境/bilibili.mp4')
-    audio = moviepy.editor.AudioFileClip('./工作环境/bilibili.mp3')
+    video = moviepy.editor.VideoFileClip(t_path + '/bilibili.mp4')
+    audio = moviepy.editor.AudioFileClip(t_path + '/bilibili.mp3')
     video = video.set_audio(audio)
     video.write_videofile(path + '/' + filename + '.mp4', verbose=False, logger=None)
     jiemian.ui.textBrowser.append('数据混流完成！')
 
-    # 删除中间音视频工程文件
-    jiemian.ui.textBrowser.append('正在清洗工作环境……')
-    os.remove('./工作环境/bilibili.mp3')
-    os.remove('./工作环境/bilibili.mp4')
-    os.rmdir('./工作环境')  # 删除目录
+    # 删除中间音视频工程文件(已优化)
+    # os.remove('./工作环境/bilibili.mp3')
+    # os.remove('./工作环境/bilibili.mp4')
+    # os.rmdir('./工作环境')  # 删除目录
+    t_dir.cleanup()
     jiemian.ui.textBrowser.append('视频下载成功!')
     jiemian.succ_signal.emit()
 
