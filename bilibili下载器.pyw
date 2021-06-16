@@ -19,7 +19,10 @@ class Jiemian(QObject):
         self.Mainwindow = QMainWindow()
         self.ui = ui.Ui_MainWindow()
         self.ui.setupUi(self.Mainwindow)
+        self.ui.lineEdit.setPlaceholderText("请输入视频网址")
+        self.ui.lineEdit_2.setPlaceholderText("请输入视频名称")
         #  self.Mainwindow.setWindowIcon(QIcon('./icon/bilibili.png'))
+
         self.ui.pushButton.clicked.connect(self.download_btn)
         self.ui.pushButton_2.clicked.connect(self.reset_all_btn)
         self.ui.pushButton_4.clicked.connect(self.reset_filename_btn)
