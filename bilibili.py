@@ -8,9 +8,10 @@ import requests
 import moviepy.editor
 from lxml import etree
 from time import sleep
+from requests.exceptions import MissingSchema
 
 
-def get_video(jiemian, temp_url, filename, path):
+def get_video(myWindow, temp_url, filename, path):
     url = temp_url
     headers = {
         'authority': 'www.bilibili.com',
@@ -18,27 +19,34 @@ def get_video(jiemian, temp_url, filename, path):
                       'Chrome/88.0.4324.182 Safari/537.36',
         'origin': 'https://www.bilibili.com'
     }
-    jiemian.log_signal.emit('正在向目标服务器发起请求……')
-    response = requests.get(url=url, headers=headers)
+    myWindow.log_signal.emit('正在向目标服务器发起请求……')
+    try:
+        response = requests.get(url=url, headers=headers)
+    except MissingSchema:
+        response = None
+        myWindow.wrong_signal.emit('请输入正确的URL！')
+        myWindow.log_signal.emit('进程已中止')
+        return 0
     if response.status_code == 200:
         sleep(0.2)
-        jiemian.log_signal.emit('已获取服务器正确响应! (响应码: 200)')
+        myWindow.log_signal.emit('已获取服务器正确响应! (响应码: 200)')
     else:
         sleep(0.2)
-        jiemian.log_signal.emit('未能获取服务器正确响应:\n   错误码: ' + str(response.status_code))
-        jiemian.wrong_signal.emit()
+        myWindow.log_signal.emit('未能获取服务器正确响应:\n   错误码: ' + str(response.status_code))
+        myWindow.log_signal.emit('进程已中止')
+        myWindow.wrong_signal.emit('连接失败！')
         return 0
-    jiemian.log_signal.emit('正在解析网页……')
+    myWindow.log_signal.emit('正在解析网页……')
     page = response.content.decode('utf-8')
     tree = etree.HTML(page)
-    jiemian.log_signal.emit('正在捕捉json文件……')
+    myWindow.log_signal.emit('正在捕捉json文件……')
     script = tree.xpath('/html/head/script[5]/text()')[0]
     script = re.sub('window.__playinfo__=', '', script)
-    jiemian.log_signal.emit('正在加载json')
+    myWindow.log_signal.emit('正在加载json')
     script = json.loads(script)
 
     # 下载视频
-    jiemian.log_signal.emit('开始下载视频文件……')
+    myWindow.log_signal.emit('开始下载视频文件……')
     """
     # 已优化
     if not os.path.exists('工作环境'):
@@ -49,7 +57,7 @@ def get_video(jiemian, temp_url, filename, path):
     t_path = t_dir.name
     if not os.path.exists(path):
         os.makedirs(path)
-    jiemian.log_signal.emit('正在捕获url……')
+    myWindow.log_signal.emit('正在捕获url……')
     url = script['data']['dash']['video'][0]['baseUrl']
     headers = {'authority': re.findall('https://(.*?)/', url)[-1],
                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -58,20 +66,20 @@ def get_video(jiemian, temp_url, filename, path):
     video_range = 'bytes=0-%d'
     headers['Range'] = format(video_range % 1000)
     sleep(0.2)
-    jiemian.log_signal.emit('正在获取数据容量……')
+    myWindow.log_signal.emit('正在获取数据容量……')
     response = requests.get(url=url, headers=headers)
     video_length = int(response.headers['Content-Range'].split('/')[-1]) - 1
-    jiemian.log_signal.emit('正在修改二次请求参数……')
+    myWindow.log_signal.emit('正在修改二次请求参数……')
     headers['Range'] = format(video_range % video_length)
-    jiemian.log_signal.emit('正在写入数据……')
+    myWindow.log_signal.emit('正在写入数据……')
     response = requests.get(url=url, headers=headers)
     with open(t_path + '/bilibili.mp4', 'wb') as fp:
         fp.write(response.content)
-    jiemian.log_signal.emit('视频文件下载完成!')
+    myWindow.log_signal.emit('视频文件下载完成!')
 
     # 下载音频
     sleep(0.2)
-    jiemian.log_signal.emit('开始下载视频文件……')
+    myWindow.log_signal.emit('开始下载视频文件……')
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                       'Chrome/88.0.4324.182 Safari/537.36',
@@ -81,36 +89,36 @@ def get_video(jiemian, temp_url, filename, path):
     }
     audio_range = 'bytes=0-%d'
     headers['Range'] = format(audio_range % 1000)
-    jiemian.log_signal.emit('正在捕获url……')
+    myWindow.log_signal.emit('正在捕获url……')
     url = script['data']['dash']['audio'][0]['baseUrl']
     response = requests.get(url=url, headers=headers)
-    jiemian.log_signal.emit('正在获取数据容量……')
+    myWindow.log_signal.emit('正在获取数据容量……')
     audio_length = int(response.headers['Content-Range'].split('/')[-1]) - 1
-    jiemian.log_signal.emit('正在修改二次请求参数……')
+    myWindow.log_signal.emit('正在修改二次请求参数……')
     headers['Range'] = format(audio_range % audio_length)
-    jiemian.log_signal.emit('正在写入数据……')
+    myWindow.log_signal.emit('正在写入数据……')
     response = requests.get(url=url, headers=headers)
     with open(t_path + '/bilibili.mp3', 'wb') as fp:
         fp.write(response.content)
-    jiemian.log_signal.emit('音频文件下载完成!')
+    myWindow.log_signal.emit('音频文件下载完成!')
 
     # 音视频混流
     sleep(0.2)
-    jiemian.log_signal.emit('开始进行数据混流……')
-    jiemian.log_signal.emit('正在进行数据混流……(请耐心等待)')
+    myWindow.log_signal.emit('开始进行数据混流……')
+    myWindow.log_signal.emit('正在进行数据混流……(请耐心等待)')
     video = moviepy.editor.VideoFileClip(t_path + '/bilibili.mp4')
     audio = moviepy.editor.AudioFileClip(t_path + '/bilibili.mp3')
     video = video.set_audio(audio)
     video.write_videofile(path + '/' + filename + '.mp4', verbose=False, logger=None)
-    jiemian.log_signal.emit('数据混流完成！')
+    myWindow.log_signal.emit('数据混流完成！')
 
     # 删除中间音视频工程文件(已优化)
     # os.remove('./工作环境/bilibili.mp3')
     # os.remove('./工作环境/bilibili.mp4')
     # os.rmdir('./工作环境')  # 删除目录
     t_dir.cleanup()
-    jiemian.log_signal.emit('视频下载成功!')
-    jiemian.succ_signal.emit()
+    myWindow.log_signal.emit('视频下载成功!')
+    myWindow.succ_signal.emit()
 
 
 if __name__ == '__main__':
