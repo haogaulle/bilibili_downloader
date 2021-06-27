@@ -9,8 +9,8 @@ from PyQt5.QtCore import pyqtSignal, QObject
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 
 
-class Jiemian(QObject):
-    wrong_signal = pyqtSignal()
+class MyWindow(QObject):
+    wrong_signal = pyqtSignal(str)
     succ_signal = pyqtSignal()
     log_signal = pyqtSignal(str)
 
@@ -55,8 +55,8 @@ class Jiemian(QObject):
     def reset_filename_btn(self):
         self.ui.lineEdit_2.clear()
 
-    def show_wrong_info(self):
-        QMessageBox.about(self.Mainwindow, '提示', '连接失败，请重试！')
+    def show_wrong_info(self, text):
+        QMessageBox.about(self.Mainwindow, '提示', text)
 
     def show_succ_info(self):
         QMessageBox.about(self.Mainwindow, '提示', self.ui.lineEdit_2.text()+' 下载成功！')
@@ -78,6 +78,6 @@ if __name__ == '__main__':
         ctypes.windll.kernel32.CloseHandle(whnd)
     """
     app = QApplication([])
-    jiemian = Jiemian()
-    jiemian.Mainwindow.show()
+    my_window = MyWindow()
+    my_window.Mainwindow.show()
     sys.exit(app.exec_())
