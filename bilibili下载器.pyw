@@ -1,6 +1,5 @@
 import ui
 import sys
-import ctypes
 import bilibili
 from threading import Thread
 from PyQt5.QtGui import QIcon
