@@ -59,45 +59,49 @@ def get_video(myWindow, temp_url, filename, path):
         os.makedirs(path)
     myWindow.log_signal.emit('正在捕获url……')
     url = script['data']['dash']['video'][0]['baseUrl']
-    headers = {'authority': re.findall('https://(.*?)/', url)[-1],
-               'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                             'Chrome/88.0.4324.182 Safari/537.36', 'origin': 'https://www.bilibili.com',
-               'referer': 'https://www.bilibili.com/', 'Range': ''}
+    headers = {
+        'authority': re.findall('https://(.*?)/', url)[-1],
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/88.0.4324.182 Safari/537.36',
+        'origin': 'https://www.bilibili.com',
+        'referer': 'https://www.bilibili.com/',
+        'Range': '',
+               }
     video_range = 'bytes=0-%d'
     headers['Range'] = format(video_range % 1000)
     sleep(0.2)
     myWindow.log_signal.emit('正在获取数据容量……')
-    response = requests.get(url=url, headers=headers)
+    response = requests.get(url=url, headers=headers, verify=False)
     video_length = int(response.headers['Content-Range'].split('/')[-1]) - 1
     myWindow.log_signal.emit('正在修改二次请求参数……')
     headers['Range'] = format(video_range % video_length)
     myWindow.log_signal.emit('正在写入数据……')
-    response = requests.get(url=url, headers=headers)
+    response = requests.get(url=url, headers=headers, verify=False)
     with open(t_path + '/bilibili.mp4', 'wb') as fp:
         fp.write(response.content)
     myWindow.log_signal.emit('视频文件下载完成!')
 
     # 下载音频
     sleep(0.2)
-    myWindow.log_signal.emit('开始下载视频文件……')
+    myWindow.log_signal.emit('开始下载音频文件……')
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                       'Chrome/88.0.4324.182 Safari/537.36',
         'origin': 'https://www.bilibili.com',
         'referer': 'https://www.bilibili.com/',
-        'Range': ''
+        'Range': '',
     }
     audio_range = 'bytes=0-%d'
     headers['Range'] = format(audio_range % 1000)
     myWindow.log_signal.emit('正在捕获url……')
     url = script['data']['dash']['audio'][0]['baseUrl']
-    response = requests.get(url=url, headers=headers)
+    response = requests.get(url=url, headers=headers, verify=False)
     myWindow.log_signal.emit('正在获取数据容量……')
     audio_length = int(response.headers['Content-Range'].split('/')[-1]) - 1
     myWindow.log_signal.emit('正在修改二次请求参数……')
     headers['Range'] = format(audio_range % audio_length)
     myWindow.log_signal.emit('正在写入数据……')
-    response = requests.get(url=url, headers=headers)
+    response = requests.get(url=url, headers=headers, verify=False)
     with open(t_path + '/bilibili.mp3', 'wb') as fp:
         fp.write(response.content)
     myWindow.log_signal.emit('音频文件下载完成!')
