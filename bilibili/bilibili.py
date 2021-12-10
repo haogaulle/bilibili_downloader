@@ -336,7 +336,7 @@ def get_video(myWindow, temp_url, filename, path):
     # os.remove('./工作环境/bilibili.mp3')
     # os.remove('./工作环境/bilibili.mp4')
     # os.rmdir('./工作环境')  # 删除目录
-    t_dir.cleanup()
+    t_dir.cleanup()  # 清理目录
     LOG = '视频下载成功!'
     myWindow.event_generate("<<log>>")
     # myWindow.log_signal.emit('视频下载成功!')
