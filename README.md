@@ -17,13 +17,7 @@
 
 
 ### Dependencies
-1. master分支gui界面使用 **pyQt5** 实现，可以实现跨平台运行；
-   - Windows10 x64 
-   - Ubuntu 20.04.2.0+
-   - Python 3.8+
-   - macOS系统下未知，欢迎尝试
-   - 相关库详见requirements.txt
-2. tkinter分支gui界面使用python内置模块Tkinter实现，在Linux运行需要安装Tk_模块
+1. master分支gui界面使用python内置模块Tkinter实现，在Linux运行需要安装Tk_模块
    - Windows10 x64 
    - Ubuntu 20.04.2.0+
    - Python 3.8+

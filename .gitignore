@@ -3,3 +3,5 @@
 *.ui
 /.idea/
 bilibili_old.py
+/bin/
+*.dll
